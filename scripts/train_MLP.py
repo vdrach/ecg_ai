@@ -25,23 +25,54 @@ from src.dataset import ECGDataset
 from src.dataset import CachedECGDataset
 from src.dataset import FastCachedECGDataset
 from src.models import MLP
+import argparse
+parser = argparse.ArgumentParser()
 
-
-device = torch.device(
-    "cuda"
-    if torch.cuda.is_available()
-    else "mps"
-    if torch.backends.mps.is_available()
-    else "cpu"
+parser.add_argument(
+    "--device",
+    default="auto",
+    choices=["auto", "cpu", "mps", "cuda"],
 )
-
-print(f"device used {device}")
-
-dataset = FastCachedECGDataset(
-    "data/processed"
+parser.add_argument(
+    "--dataclass",
+    default="fast",
+    choices=["slow", "medium", "fast"],
 )
+args = parser.parse_args()
 
+if args.device == "auto":
+    device = torch.device(
+        "cuda"
+        if torch.cuda.is_available()
+        else "mps"
+        if torch.backends.mps.is_available()
+        else "cpu"
+    )
+
+else:
+    device = torch.device(args.device)
+
+
+
+if args.dataclass == 'fast':
+    dataset = FastCachedECGDataset(
+        "data/processed"
+    )
+elif args.dataclass == 'medium':
+     dataset = CachedECGDataset(
+        "data/processed"
+    )
+elif args.dataclass == 'slow':
+    dataset = ECGDataset(
+            "data/processed"
+    )
 n = len(dataset)
+
+print(
+    f"Training on {device} "
+    f"with {len(dataset):,} samples "
+    f"and dataclass: {args.dataclass}"
+)
 
 train_size = int(0.8 * n)
 val_size = n - train_size
@@ -50,6 +81,7 @@ train_ds, val_ds = torch.utils.data.random_split(
     dataset,
     [train_size, val_size],
 )
+
 
 train_loader = DataLoader(
     train_ds,
@@ -72,15 +104,13 @@ optimizer = torch.optim.Adam(
 )
 
 epochs = 10
-
 start_training = time.perf_counter()
 
 for epoch in range(epochs):
 
     model.train()
-
+    
     running_loss = 0
-
     start = time.perf_counter()
 
     for x, y in train_loader:
@@ -89,18 +119,14 @@ for epoch in range(epochs):
         y = y.to(device)
 
         optimizer.zero_grad()
-
         logits = model(x)
-
         loss = criterion(
             logits,
             y,
         )
 
         loss.backward()
-
         optimizer.step()
-
         running_loss += loss.item()
 
     elapsed = (
