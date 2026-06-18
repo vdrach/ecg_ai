@@ -1,6 +1,6 @@
 name = "HPC_pytorch_AI"
 human_name = "HPC Pytorch "
-pip_packages = "wfdb fsspec" 
+pip_packages = "wfdb fsspec nvidia-ml-py" 
 modules = [
   "spack-modules/293",
   "compilers/llvm/14.0.6-xpvm6vv",

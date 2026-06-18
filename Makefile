@@ -14,6 +14,9 @@ data-small:
 data-full:
 	python3 scripts/download_data.py --mode full
 
+copy-data:
+	cp -r /shared/ecg_data/ltafdb data/raw/
+
 preprocess:
 	python3 scripts/preprocess.py
 
