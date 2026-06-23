@@ -9,7 +9,7 @@
 source  /users/${USER}/ecg_ai/modules_for_ecg_ai
 . /users/${USER}/.jupyter_virtualenvs/HPC_pytorch_AI/bin/activate
 
-python ../scripts/preprocess.py --data-dir /users/vdrach/ecg_ai/data/raw/ltafdb --output-dir /users/vdrach/ecg_ai/data/processed &
+python ../scripts/preprocess.py --data-dir /users/vdrach/ecg_ai/data/raw/ltafdb --output-dir /users/vdrach/ecg_ai/data/preprocessed &
 TRAIN_PID=$!
 python ../scripts/resource_monitor.py --interval 1 --out preprocess_${SLURM_JOB_PARTITION}.csv --pid ${TRAIN_PID} &
 MONITOR_PID=$!

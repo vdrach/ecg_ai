@@ -28,6 +28,14 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 
 import train_utils as tu
 
+from pathlib import Path
+import sys
+
+project_root = Path.cwd()
+while not (project_root / "src").exists():
+    project_root = project_root.parent
+sys.path.insert(0, str(project_root))
+print(f"project root found: {project_root}")
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -101,7 +109,7 @@ def main():
                         f"(global per-epoch: {rank_shard.X.shape[0] * world_size:,})")
 
     # Build model -- import deferred until after project_root is in sys.path
-    from models_resnet1d import build_resnet1d
+    from src.models_resnet1d import build_resnet1d
     model = build_resnet1d(base_width=args.base_width, depth=args.depth).to(device)
 
     if rank == 0:

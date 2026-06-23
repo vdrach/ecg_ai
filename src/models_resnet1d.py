@@ -91,16 +91,16 @@ class ResNet1d(nn.Module):
         self.pool = nn.AdaptiveAvgPool1d(1)  # global average pool over time
         self.classifier = nn.Linear(stage_widths[-1], num_classes)
 
+
     def forward(self, x):
-        # Expected input shape: (batch, channels=2, time=1280)
-        # If the dataset gives (batch, time, channels), transpose first.
-        # The FastCachedECGDataset/CachedECGDataset in this project
-        # produce (batch, 2, 1280) directly, so no transpose needed.
+        # Dataset stores tensors as (batch, time, channels) -- transpose to
+        # (batch, channels, time) for Conv1d/BatchNorm1d which expect channels
+        # in dim 1.
+        x = x.transpose(1, 2)
         x = self.stem(x)
         x = self.stages(x)
-        x = self.pool(x).squeeze(-1)  # (batch, channels)
+        x = self.pool(x).squeeze(-1)
         return self.classifier(x)
-
 
 def build_resnet1d(base_width=64, depth=2):
     """Convenience constructor for the training script."""

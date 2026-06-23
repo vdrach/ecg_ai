@@ -53,10 +53,13 @@ class _CNNBranch(nn.Module):
         self.pool = nn.AdaptiveAvgPool1d(1)
         self.out_dim = width
 
+    # in _CNNBranch.forward:
     def forward(self, x):
+        x = x.transpose(1, 2)        # (batch, time, channels) -> (batch, channels, time)
         x = self.stem(x)
         x = self.blocks(x)
         return self.pool(x).squeeze(-1)
+
 
 
 class _TransformerBranch(nn.Module):
@@ -85,15 +88,16 @@ class _TransformerBranch(nn.Module):
         self.encoder = nn.TransformerEncoder(encoder_layer, num_layers=depth)
         self.out_dim = width
 
+
+    # in _TransformerBranch.forward:
     def forward(self, x):
-        # x: (batch, channels=2, time=1280)
-        x = self.proj(x)              # (batch, width, time/4)
-        x = x.transpose(1, 2)         # (batch, time/4, width) for batch_first attn
+        x = x.transpose(1, 2)        # (batch, time, channels) -> (batch, channels, time)
+        x = self.proj(x)
+        x = x.transpose(1, 2)        # now back to (batch, time/4, width) for attention
         x = x + self.pos_embed
-        x = self.encoder(x)           # (batch, time/4, width)
-        return x.mean(dim=1)          # (batch, width) -- mean pool over time
-
-
+        x = self.encoder(x)
+        return x.mean(dim=1)
+   
 class DualBranchECG(nn.Module):
     """CNN + Transformer dual-branch ECG classifier with learned fusion."""
 

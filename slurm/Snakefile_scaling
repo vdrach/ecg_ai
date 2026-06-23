@@ -55,7 +55,7 @@ RESNET_SIZES = {
 DUAL_SIZES = {
     "small":  {"cnn_width": 32,  "cnn_depth": 2, "tf_width": 64,  "tf_depth": 2, "tf_heads": 4},
     "medium": {"cnn_width": 64,  "cnn_depth": 4, "tf_width": 128, "tf_depth": 4, "tf_heads": 4},
-    "large":  {"cnn_width": 128, "cnn_depth": 4, "tf_width": 256, "tf_depth": 6, "tf_heads": 8},
+    "large":  {"cnn_width": 128, "cnn_depth": 4, "tf_width": 192, "tf_depth": 4, "tf_heads": 8},
 }
 
 SCRIPTS_DIR = "../scripts"

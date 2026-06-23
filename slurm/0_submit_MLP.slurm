@@ -13,23 +13,26 @@ source  /users/${USER}/ecg_ai/modules_for_ecg_ai
 
 EXE=train_MLP_exp.py
 
-python ../scripts/${EXE} --epochs 10 --device cuda --dataclass fast  --model tiny --data_on_gpu
-python ../scripts/${EXE} --epochs 10 --device cuda --dataclass fast  --model tiny --data_on_gpu --manual_batching
-python ../scripts/${EXE}  --epochs 10 --device cuda --dataclass fast  --model big --data_on_gpu
-python ../scripts/${EXE} --epochs 10 --device cuda --dataclass fast  --model big --data_on_gpu --manual_batching
+python ../scripts/${EXE} --epochs 10 --device cuda --dataclass fast 
+#python ../scripts/${EXE} --epochs 10 --device cuda --dataclass fast  --model tiny --data_on_gpu
+
+
+#python ../scripts/${EXE} --epochs 10 --device cuda --dataclass fast  --model tiny --data_on_gpu --manual_batching
+#python ../scripts/${EXE}  --epochs 10 --device cuda --dataclass fast  --model big --data_on_gpu
+#python ../scripts/${EXE} --epochs 10 --device cuda --dataclass fast  --model big --data_on_gpu --manual_batching
 
 # Push batch size hard, with data_on_gpu so loader overhead is fully eliminated
-python ../scripts/${EXE} --device cuda --dataclass fast --data_on_gpu \
-    --batch_size 8192 --epochs 10 --model tiny
+#python ../scripts/${EXE} --device cuda --dataclass fast --data_on_gpu \
+#    --batch_size 8192 --epochs 10 --model tiny
 
-python ../scripts/${EXE} --device cuda --dataclass fast --data_on_gpu \
-    --batch_size 8192 --epochs 10 --model big
+#python ../scripts/${EXE} --device cuda --dataclass fast --data_on_gpu \
+#    --batch_size 8192 --epochs 10 --model big
 
-python ../scripts/${EXE}  --device cuda --dataclass fast --data_on_gpu \
-    --batch_size 8192 --epochs 10 --model tiny --manual_batching
+#python ../scripts/${EXE}  --device cuda --dataclass fast --data_on_gpu \
+#    --batch_size 8192 --epochs 10 --model tiny --manual_batching
 
-python ../scripts/${EXE} --device cuda --dataclass fast --data_on_gpu \
-    --batch_size 8192 --epochs 10 --model big --manual_batching
+#python ../scripts/${EXE} --device cuda --dataclass fast --data_on_gpu \
+#    --batch_size 8192 --epochs 10 --model big --manual_batching
 
 
 

@@ -17,7 +17,7 @@ source /users/${USER}/ecg_ai/modules_for_ecg_ai
 
 # Override these from the command line or environment per-job
 SCRIPT="${SCRIPT:-../scripts/train_resnet1d.py}"
-NPROC="${NPROC:-4}"                # number of GPUs to use (1, 2, or 4)
+NPROC="${NPROC:-4}"                # use the existing value of NPROC if it's already set in the environment; otherwise default to 4- use e.g NPROC=2 sbatch scaling_h100.slurm            #to use 2 GPU
 EXTRA_ARGS="${EXTRA_ARGS:---base_width 64 --depth 2}"
 EPOCHS="${EPOCHS:-10}"
 BATCH_SIZE="${BATCH_SIZE:-8192}"

@@ -27,6 +27,14 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 
 import train_utils as tu
 
+from pathlib import Path
+import sys
+
+project_root = Path.cwd()
+while not (project_root / "src").exists():
+    project_root = project_root.parent
+sys.path.insert(0, str(project_root))
+print(f"project root found: {project_root}")
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -105,7 +113,7 @@ def main():
     tu.print_main(rank, f"Rank {rank}/{world_size}: shard has {rank_shard.X.shape[0]:,} samples "
                         f"(global per-epoch: {rank_shard.X.shape[0] * world_size:,})")
 
-    from models_dual import build_dual
+    from src.models_dual import build_dual
     model = build_dual(
         cnn_width=args.cnn_width, cnn_depth=args.cnn_depth,
         tf_width=args.tf_width, tf_depth=args.tf_depth, tf_heads=args.tf_heads,
