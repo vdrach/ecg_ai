@@ -4,9 +4,9 @@
 #SBATCH -n 1
 #SBATCH -c 64
 #SBATCH -t 03:00:00
-#SBATCH -p gpu_h100
-#SBATCH --gres=gpu:4
-#SBATCH -o snakemake_scaling_h100_%j.out
+#SBATCH -p gpu_l40s
+#SBATCH --gres=gpu:8
+#SBATCH -o snakemake_scaling_l40s_%j.out
 
 source /users/${USER}/ecg_ai/modules_for_ecg_ai
 . /users/${USER}/.jupyter_virtualenvs/HPC_pytorch_AI/bin/activate
@@ -15,4 +15,4 @@ source /users/${USER}/ecg_ai/modules_for_ecg_ai
 # (i.e. sequential runs). Each rule INTERNALLY launches torchrun with up to
 # 4 GPUs -- so we serialize the runs through Snakemake but use all the
 # allocated GPUs in parallel within each individual rule.
-snakemake -s Snakefile_scaling --cores 1 -p --config node=h100
+snakemake -s Snakefile_scaling --cores 1 -p --config node=l40s
